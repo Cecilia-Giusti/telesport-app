@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, take, takeUntil, tap } from 'rxjs';
+import { Subject, catchError, takeUntil, tap, throwError } from 'rxjs';
 import { OlympicService } from './core/services/olympic.service';
 import { Olympic } from './core/models/Olympic';
 
@@ -18,7 +18,17 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroy$ = new Subject<boolean>();
     this.olympicService
       .loadInitialData()
-      .pipe(tap(console.log), takeUntil(this.destroy$))
+      .pipe(
+        tap(console.log),
+        takeUntil(this.destroy$),
+        catchError((error) => {
+          console.error(
+            'Erreur lors du chargement des données initiales',
+            error
+          );
+          return throwError(() => error);
+        })
+      )
       .subscribe();
   }
 

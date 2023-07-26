@@ -1,4 +1,5 @@
-<div class="center">
-  <h2>No corresponding page found</h2>
+<div *ngIf="error$" class="center">
+  <h2>{{ getErrorMessage(error$) }}</h2>
   <a routerLink="">Go back</a>
 </div>
+
