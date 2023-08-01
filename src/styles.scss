@@ -1,15 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+@import "../src/assets/styles/variables";
+@import "../src/assets/styles/mixins";
 
 .ngx-charts-tooltip-content.position-top.type-tooltip.animate {
-    background: #04838F;
+    background: $color-primary;
 
     span {
-        border-top: 7px solid #04838F;
+        border-top: 7px solid $color-primary;
+        @include font;
     }
 }
 
 .pie-label.animation {
-    font-family: 'Roboto', sans-serif;
+    @include font;
     font-size: 1.1rem;
-
 }
