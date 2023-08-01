@@ -4,18 +4,18 @@
   <div class="homePage-numberSection">
     <div class="homePage-numberSection-article">
       <p class="homePage-numberSection-text">Number of JOs</p>
-      <p class="homePage-numberSection-number">{{ yearCount$ | async }}</p>
+      <p class="homePage-numberSection-number">{{ yearCount }}</p>
     </div>
 
     <div class="homePage-numberSection-article">
       <p class="homePage-numberSection-text">Number of countries</p>
-      <p class="homePage-numberSection-number">{{ countryCount$ | async }}</p>
+      <p class="homePage-numberSection-number">{{ countryCount }}</p>
     </div>
   </div>
 
-  <ngx-charts-pie-chart [view]="view" [results]="countries$ | async" [gradient]="gradient" 
+  <ngx-charts-pie-chart [view]="view" [results]="countries" [gradient]="gradient" 
      [labels]="showLabels" [doughnut]="isDoughnut" (select)="onSelect($event)"
-    (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+    >
 
     <ng-template #tooltipTemplate let-model="model">
       <p>{{ model.name }}</p>

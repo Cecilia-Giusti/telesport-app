@@ -5,7 +5,6 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/services/error.service';
-import { map } from 'rxjs/operators';
 import { Country } from 'src/app/core/models/Country.model';
 
 @Component({
@@ -14,12 +13,13 @@ import { Country } from 'src/app/core/models/Country.model';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public olympics$: Observable<Olympic[]> = of([]);
   private unsubscribe$ = new Subject<void>();
   public errorStatus$: Observable<number | null> = of();
-  public countries$: Observable<Country[]> = of([]);
-  public countryCount$: Observable<number> = of(0);
-  public yearCount$: Observable<number> = of(0);
+
+  public olympics: Olympic[] = [];
+  public countries: Country[] = [];
+  public countryCount: number = 0;
+  public yearCount: number = 0;
 
   view: [number, number] = [700, 400];
 
@@ -38,33 +38,27 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.countries$ = this.olympicService.getOlympics().pipe(
-      map((olympics: Olympic[]) =>
-        olympics.map((olympic: Olympic) => {
+    this.olympicService
+      .getOlympics()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((olympics: Olympic[]) => {
+        this.olympics = olympics;
+
+        this.countries = olympics.map((olympic: Olympic) => {
           let totalMedals = olympic.participations.reduce(
             (sum, participation) => sum + participation.medalsCount,
             0
           );
           return new Country(olympic.country, totalMedals);
-        })
-      )
-    );
+        });
 
-    this.countryCount$ = this.olympicService
-      .getOlympics()
-      .pipe(map((olympics: Olympic[]) => olympics.length));
+        this.countryCount = olympics.length;
 
-    this.yearCount$ = this.olympicService.getOlympics().pipe(
-      map((olympics: Olympic[]) => {
         const allYears = olympics.flatMap((olympic) =>
           olympic.participations.map((participation) => participation.year)
         );
-        const uniqueYears = Array.from(new Set(allYears));
-        return uniqueYears.length;
-      })
-    );
-
-    this.olympics$.pipe(takeUntil(this.unsubscribe$)).subscribe();
+        this.yearCount = Array.from(new Set(allYears)).length;
+      });
 
     this.errorService.errorStatus$
       .pipe(takeUntil(this.unsubscribe$))
@@ -76,20 +70,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Permet un nettoyage correct lorsque this.unsubscribe est appelé
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 
-  onSelect(data: any): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
-
-  onActivate(data: any): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
-
-  onDeactivate(data: any): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  onSelect(data: Country): void {
+    this.router.navigate(['/detail', data.name]);
   }
 }
