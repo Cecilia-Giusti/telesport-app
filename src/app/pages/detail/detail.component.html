@@ -1,0 +1,39 @@
+<section class="detailPage">
+    <div class="detailPage-header">
+    <button class="btn-next" routerLink="/">Retour</button>
+    <h1 class="detailPage-title">{{country}}</h1>
+</div>
+    <div class="detailPage-informations">
+        <div class="detailPage-informations-item">
+            <p class="detailPage-informations-text">Number of entries</p>
+            <p class="detailPage-informations-number">{{entries}}</p>
+        </div>
+        <div class="detailPage-informations-item">
+            <p class="detailPage-informations-text">Total number medals</p>
+            <p class="detailPage-informations-number">{{medals}}</p>
+        </div>
+        <div class="detailPage-informations-item">
+            <p class="detailPage-informations-text">Total number of athletes</p>
+            <p class="detailPage-informations-number">{{athletes}}</p>
+        </div>
+    </div>
+    <div class="detailPage-graph">
+        <ngx-charts-line-chart
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [xAxisLabel]="xAxisLabel"
+        [timeline]="timeline"
+        [results]="olympicDetail"
+    
+        >
+
+        <ng-template #tooltipTemplate let-model="model">
+            <p>{{ model.name }}</p>
+            <p><i class="fa-solid fa-award"></i> {{ model.value }}</p>
+          </ng-template>
+      </ngx-charts-line-chart>
+
+    </div>
+</section>

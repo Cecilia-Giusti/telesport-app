@@ -13,7 +13,8 @@
     </div>
   </div>
 
-  <ngx-charts-pie-chart [view]="view" [results]="countries" [gradient]="gradient" 
+  <div class="homePage-charts">
+  <ngx-charts-pie-chart  [results]="countries" [gradient]="gradient" 
      [labels]="showLabels" [doughnut]="isDoughnut" (select)="onSelect($event)"
     >
 
@@ -22,5 +23,5 @@
       <p><i class="fa-solid fa-award"></i> {{ model.value }}</p>
     </ng-template>
   </ngx-charts-pie-chart>
-
+</div>
 </div>

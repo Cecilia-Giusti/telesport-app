@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { Olympic } from '../models/Olympic';
 import { ErrorService } from './error.service';
 
@@ -31,23 +30,11 @@ export class OlympicService {
     return this.olympics$.asObservable();
   }
 
-  getCountryDetails(countryName: string): Observable<Olympic> {
-    return this.getOlympics().pipe(
-      map((olympics: Olympic[]) => {
-        const country = olympics.find(
-          (olympic: Olympic) => olympic.country === countryName
-        );
-        if (country) {
-          return country;
-        } else {
-          // TODO à améliorer
-          throw new Error(`No country found with name ${countryName}`);
-        }
-      }),
-      catchError((error) => {
-        console.error(error);
-        return throwError(() => error);
-      })
+  getDetailById(id: string): Observable<Olympic | undefined> {
+    return this.olympics$.pipe(
+      map((olympics) =>
+        olympics.find((olympic) => olympic.id.toString() === id)
+      )
     );
   }
 }

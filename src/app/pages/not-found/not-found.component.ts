@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { ErrorService } from 'src/app/core/services/error.service';
 
@@ -11,13 +12,17 @@ export class NotFoundComponent implements OnInit {
   error$!: number | null;
   private destroy$!: Subject<boolean>;
 
-  constructor(private errorService: ErrorService) {}
+  constructor(private errorService: ErrorService, private router: Router) {}
 
   ngOnInit(): void {
     this.destroy$ = new Subject<boolean>();
     this.errorService.errorStatus$.subscribe((status) => {
       this.error$ = status;
     });
+
+    if (this.error$ === null) {
+      this.router.navigate(['/']);
+    }
   }
 
   ngOnDestroy(): void {

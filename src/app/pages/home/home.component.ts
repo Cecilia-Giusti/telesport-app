@@ -5,7 +5,8 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Router } from '@angular/router';
 import { ErrorService } from 'src/app/core/services/error.service';
-import { Country } from 'src/app/core/models/Country.model';
+import { CountryPies } from 'src/app/core/models/CountryPie';
+import { getMedals } from 'src/utils/getMedals';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +18,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   public errorStatus$: Observable<number | null> = of();
 
   public olympics: Olympic[] = [];
-  public countries: Country[] = [];
+  public countries: CountryPies[] = [];
   public countryCount: number = 0;
   public yearCount: number = 0;
-
-  view: [number, number] = [700, 400];
 
   // options
   gradient: boolean = true;
@@ -45,11 +44,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.olympics = olympics;
 
         this.countries = olympics.map((olympic: Olympic) => {
-          let totalMedals = olympic.participations.reduce(
-            (sum, participation) => sum + participation.medalsCount,
-            0
-          );
-          return new Country(olympic.country, totalMedals);
+          let totalMedals = getMedals(olympic.participations);
+          return new CountryPies(olympic.country, totalMedals);
         });
 
         this.countryCount = olympics.length;
@@ -70,13 +66,21 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
+  onSelect(data: CountryPies): void {
+    let id;
+    for (let i = 0; i < this.olympics.length; i++) {
+      if (data.name === this.olympics[i].country) {
+        id = this.olympics[i].id;
+      }
+    }
+    id !== undefined
+      ? this.router.navigate(['/detail', id])
+      : this.router.navigate(['/not-found']);
+  }
+
   // Permet un nettoyage correct lorsque this.unsubscribe est appelé
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  onSelect(data: Country): void {
-    this.router.navigate(['/detail', data.name]);
   }
 }
