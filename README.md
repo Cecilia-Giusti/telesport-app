@@ -1,29 +1,39 @@
-# OlympicGamesStarter
+# Telesport-app
+
+## Getting Started
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
 
-Don't forget to install your node_modules before starting (`npm install`).
+### Prerequisites
 
-## Development server
+Telesport-app uses the following tech stack:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- [Node.js](https://nodejs.org/en/) version 18
+- [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
 
-## Build
+### Instructions
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1.  Fork this repo
+2.  Clone the repo onto your computer
+3.  Open a terminal window in the cloned project
+4.  Run the following commands:
 
-## Where to start
+### Install dependencies
 
-As you can see, an architecture has already been defined for the project. It is just a suggestion, you can choose to use your own. The predefined architecture includes (in addition to the default angular architecture) the following:
+    npm install
 
-- `components` folder: contains every reusable components
-- `pages` folder: contains components used for routing
-- `core` folder: contains the business logic (`services` and `models` folders)
+### Start application
 
-I suggest you to start by understanding this starter code. Pay an extra attention to the `app-routing.module.ts` and the `olympic.service.ts`.
+    ng serve
 
-Once mastered, you should continue by creating the typescript interfaces inside the `models` folder. As you can see I already created two files corresponding to the data included inside the `olympic.json`. With your interfaces, improve the code by replacing every `any` by the corresponding interface.
+Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-You're now ready to implement the requested features.
+### Build
 
-Good luck!
+`ng build`
+
+The build artifacts will be stored in the `dist/` directory.
+
+## Author
+
+Cécilia Giusti

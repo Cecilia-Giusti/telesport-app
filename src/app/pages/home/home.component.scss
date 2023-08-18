@@ -1,0 +1,61 @@
+@import '../../../assets/styles/variables';
+@import '../../../assets/styles/mixins';
+
+
+.homePage {
+    @include flex($direction: column);
+}
+
+h1 {
+    border-radius: 10px;
+    padding: 6px 12px;
+    background: $color-primary;
+    color: $color-white;
+    @include font;
+}
+
+.homePage-numberSection {
+    @include flex;
+    gap: 20px;
+
+    &-article {
+        border-radius: 10px;
+        border: 2px solid $color-primary;
+        @include flex($direction: column);
+        padding: 10px 12px;
+        gap: 5px;
+    }
+
+    &-text {
+        margin: 0;
+        @include font;
+    }
+
+    &-number {
+        margin: 0;
+        @include font(700)
+    }
+}
+
+.homePage-charts {
+    width: 100%;
+    height: 50vh;
+}
+
+@media screen and (max-width: 425px) {
+
+    .homePage-charts {
+        height: 40vh;
+    }
+
+}
+
+@media screen and (max-width: 320px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .homePage-numberSection-text {
+        font-size: 0.8rem;
+    }
+}

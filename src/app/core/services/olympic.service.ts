@@ -1,31 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { Olympic } from '../models/Olympic';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OlympicService {
   private olympicUrl = './assets/mock/olympic.json';
-  private olympics$ = new BehaviorSubject<any>(undefined);
+  private olympics$ = new BehaviorSubject<Olympic[]>([]);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private errorService: ErrorService) {}
 
   loadInitialData() {
-    return this.http.get<any>(this.olympicUrl).pipe(
+    return this.http.get<Olympic[]>(this.olympicUrl).pipe(
       tap((value) => this.olympics$.next(value)),
-      catchError((error, caught) => {
-        // TODO: improve error handling
+      catchError((error) => {
         console.error(error);
-        // can be useful to end loading state and let the user know something went wrong
-        this.olympics$.next(null);
-        return caught;
+        this.errorService.setError(error.status);
+        this.olympics$.next([]);
+        return throwError(() => error);
       })
     );
   }
 
-  getOlympics() {
+  getOlympics(): Observable<Olympic[]> {
     return this.olympics$.asObservable();
+  }
+
+  getDetailById(id: string): Observable<Olympic | undefined> {
+    return this.olympics$.pipe(
+      map((olympics) =>
+        olympics.find((olympic) => olympic.id.toString() === id)
+      )
+    );
   }
 }
