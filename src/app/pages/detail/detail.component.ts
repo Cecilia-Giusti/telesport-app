@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, OutletContext, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { Subject } from 'rxjs';
 import { CountryLine, DataPoint } from 'src/app/core/models/CountryLine';
@@ -21,7 +21,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   olympicSeries: DataPoint[] = [];
   olympicDetail?: CountryLine[] = [];
 
-  private unsubscribe$ = new Subject<void>();
+  private destroy$!: Subject<boolean>;
 
   // options
   showLabels: boolean = true;
@@ -42,6 +42,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.destroy$ = new Subject<boolean>();
     this.id = this.route.snapshot.paramMap.get('id');
 
     if (this.id === null || this.id === undefined) {
@@ -49,7 +50,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     } else {
       this.olympicService
         .getDetailById(this.id)
-        .pipe(takeUntil(this.unsubscribe$))
+        .pipe(takeUntil(this.destroy$))
         .subscribe((olympic) => {
           if (olympic) {
             for (let i = 0; i < olympic.participations.length; i++) {
@@ -59,8 +60,6 @@ export class DetailComponent implements OnInit, OnDestroy {
                   olympic.participations[i].medalsCount
                 )
               );
-
-              console.log(this.olympicSeries);
             }
             this.olympicDetail?.push(
               new CountryLine(olympic.country, this.olympicSeries)
@@ -77,7 +76,6 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next(true);
   }
 }

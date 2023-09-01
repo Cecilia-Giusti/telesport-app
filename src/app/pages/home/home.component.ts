@@ -14,7 +14,7 @@ import { getMedals } from 'src/utils/getMedals';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  private destroy$!: Subject<boolean>;
   public errorStatus$: Observable<number | null> = of();
 
   public olympics: Olympic[] = [];
@@ -37,9 +37,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.destroy$ = new Subject<boolean>();
     this.olympicService
       .getOlympics()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((olympics: Olympic[]) => {
         this.olympics = olympics;
 
@@ -57,10 +58,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
 
     this.errorService.errorStatus$
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.destroy$))
       .subscribe((error) => {
         if (error) {
-          this.unsubscribe$.next();
+          this.destroy$.next(true);
           this.router.navigate(['/not-found']);
         }
       });
@@ -78,9 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       : this.router.navigate(['/not-found']);
   }
 
-  // Permet un nettoyage correct lorsque this.unsubscribe est appelé
   ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.destroy$.next(true);
   }
 }

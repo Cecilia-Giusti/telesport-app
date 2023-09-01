@@ -19,7 +19,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.olympicService
       .loadInitialData()
       .pipe(
-        tap(console.log),
         takeUntil(this.destroy$),
         catchError((error) => {
           console.error(
