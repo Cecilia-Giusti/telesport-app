@@ -8,6 +8,12 @@ import { ErrorService } from 'src/app/core/services/error.service';
 import { CountryPies } from 'src/app/core/models/CountryPie';
 import { getMedals } from 'src/utils/getMedals';
 
+/**
+ * @component
+ * @description
+ * HomeComponent is the home page component.
+ * It contains logic for initializing, selecting, and destroying the home component of the application.
+ */
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,12 +28,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   public countryCount: number = 0;
   public yearCount: number = 0;
 
-  // options
+  // graphic options
   gradient: boolean = true;
   istooltipDisabled: boolean = true;
   showLabels: boolean = true;
   isDoughnut: boolean = false;
 
+  /**
+   * @constructor
+   * @param {OlympicService} olympicService - The service to interact with the Olympic Games data.
+   * @param {Router} router - The Angular service for interacting with the router.
+   * @param {ErrorService} errorService - The service to interact with the error status.
+   */
   constructor(
     private olympicService: OlympicService,
     private router: Router,
@@ -36,6 +48,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     Object.assign(this);
   }
 
+  /**
+   * - Initializes `destroy$`.
+   * - Calls `loadInitialData` of `olympicService` to load the initial data.
+   */
   ngOnInit(): void {
     this.destroy$ = new Subject<boolean>();
     this.olympicService
@@ -67,6 +83,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * @description Handles the selection of a country pie chart slice.
+   * Navigates to the detail page of the selected country or to the 'not-found' page if the country is not found.
+   *
+   * @param {CountryPies} data - The selected country pie.
+   */
   onSelect(data: CountryPies): void {
     let id;
     for (let i = 0; i < this.olympics.length; i++) {
@@ -79,6 +101,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       : this.router.navigate(['/not-found']);
   }
 
+  /**
+   * Sends a true value to `destroy$` to indicate that the component is about to be destroyed.
+   */
   ngOnDestroy(): void {
     this.destroy$.next(true);
   }

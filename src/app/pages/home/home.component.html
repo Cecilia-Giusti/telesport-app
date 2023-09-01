@@ -12,16 +12,17 @@
       <p class="homePage-numberSection-number">{{ countryCount }}</p>
     </div>
   </div>
-
+  <!-- Chart graph -->
   <div class="homePage-charts">
-  <ngx-charts-pie-chart  [results]="countries" [gradient]="gradient" 
-     [labels]="showLabels" [doughnut]="isDoughnut" (select)="onSelect($event)"
-    >
+    <ngx-charts-pie-chart [results]="countries" [gradient]="gradient" [labels]="showLabels" [doughnut]="isDoughnut"
+      (select)="onSelect($event)">
 
-    <ng-template #tooltipTemplate let-model="model">
-      <p>{{ model.name }}</p>
-      <p><i class="fa-solid fa-award"></i> {{ model.value }}</p>
-    </ng-template>
-  </ngx-charts-pie-chart>
-</div>
+
+      <!-- Tooltips template -->
+      <ng-template #tooltipTemplate let-model="model">
+        <p>{{ model.name }}</p>
+        <p><i class="fa-solid fa-award"></i> {{ model.value }}</p>
+      </ng-template>
+    </ngx-charts-pie-chart>
+  </div>
 </div>

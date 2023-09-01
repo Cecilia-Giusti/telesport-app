@@ -7,6 +7,12 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 import { getAthletes } from 'src/utils/getAthletes';
 import { getMedals } from 'src/utils/getMedals';
 
+/**
+ * @component
+ * @description
+ * detail component is the component for detail Page
+ * we arrive on this page via the homepage (home component)
+ */
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
@@ -23,9 +29,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   private destroy$!: Subject<boolean>;
 
-  // options
-  showLabels: boolean = true;
-  animations: boolean = true;
+  // graphic options
   xAxis: boolean = true;
   yAxis: boolean = true;
   showYAxisLabel: boolean = true;
@@ -33,6 +37,12 @@ export class DetailComponent implements OnInit, OnDestroy {
   xAxisLabel: string = 'Dates';
   timeline: boolean = true;
 
+  /**
+   * @constructor
+   * @param {ActivatedRoute} route - The activated route service that contains information about the route.
+   * @param {Router} router - The Angular service for interacting with the router.
+   * @param {OlympicService} olympicService - The service to interact with the Olympic Games data.
+   */
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -41,6 +51,11 @@ export class DetailComponent implements OnInit, OnDestroy {
     Object.assign(this);
   }
 
+  /**
+   * - Initializes `destroy$`.
+   * - Retrieves the `id` from the route parameters.
+   * - If the `id` is null or undefined, navigates to the 'not-found' page.
+   */
   ngOnInit(): void {
     this.destroy$ = new Subject<boolean>();
     this.id = this.route.snapshot.paramMap.get('id');
@@ -75,6 +90,9 @@ export class DetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Sends a true value to `destroy$` to indicate that the component is about to be destroyed.
+   */
   ngOnDestroy(): void {
     this.destroy$.next(true);
   }

@@ -1,5 +1,12 @@
 # Telesport-app
 
+Telesport app is a web application that allows you to see the number of Olympic Games medals for each participating country
+
+Two pages are currently available:
+
+- Home page
+- one page details
+
 ## Getting Started
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
